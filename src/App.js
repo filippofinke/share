@@ -52,7 +52,7 @@ const App = () => {
             <LazyLoad key={m.timestamp}>
               <Message
                 message={m}
-                onClick={() => copyMessage(m.message)}
+                onClick={() => copyMessage(m)}
               ></Message>
             </LazyLoad>
           );
