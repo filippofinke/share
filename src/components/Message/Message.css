@@ -1,0 +1,24 @@
+.message {
+  background-color: #2d333b;
+  color: #cdd9e5;
+  padding: 10px;
+  border: 1px solid #444c56;
+  margin: 5px 0px;
+  position: relative;
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 5px;
+  overflow-wrap: break-word;
+}
+
+.message:hover {
+  background-color: #323c49;
+}
+
+.message .timestamp {
+  font-size: 0.6em;
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  color: #a9b2bb;
+}

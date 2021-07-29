@@ -1,0 +1,10 @@
+.app {
+  margin: 20px auto;
+  max-width: 800px;
+}
+
+@media only screen and (max-width: 800px) {
+  .app {
+    margin: 5px;
+  }
+}

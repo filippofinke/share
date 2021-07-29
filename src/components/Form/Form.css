@@ -1,0 +1,37 @@
+.form {
+  background-color: #22272e;
+  width: 100%;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #373e47;
+  box-sizing: border-box;
+}
+
+.form button {
+  cursor: pointer;
+  color: #cdd9e5;
+  background-color: transparent;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+}
+
+.form:hover {
+  border: 1px solid #4184e4;
+}
+
+.form input {
+  flex: 1;
+  background-color: transparent;
+  border: none;
+  resize: none;
+  color: #cdd9e5;
+  font-size: 1em;
+  padding: 10px;
+}
+
+.form input:focus {
+  outline: none;
+}
