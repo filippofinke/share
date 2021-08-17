@@ -64,6 +64,7 @@ const App = () => {
 								setMessage(process.env.REACT_APP_SENDIT + req.response);
 								resolve();
 							} else {
+								setMessage("");
 								reject();
 							}
 						}
