@@ -3,7 +3,7 @@ import React from "react";
 
 const DeleteButton = (props) => {
   return (
-    <button className="delete" onClick={props.onClick}>
+    <button className="delete-button" onClick={props.onClick}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
