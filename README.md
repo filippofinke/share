@@ -30,6 +30,9 @@ npm run start
 - Github: [@filippofinke](https://github.com/filippofinke)
 - LinkedIn: [@filippofinke](https://linkedin.com/in/filippofinke)
 
+## Todo
+- [ ] Add messages encryption
+
 ## Show your support
 
 Give a ⭐️ if this project helped you!
