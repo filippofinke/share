@@ -4,6 +4,14 @@
 
 ### ✨ [Demo](https://share.filippofinke.ch)
 
+<details>
+  <summary>Demo</summary>
+  <br>
+  <p align="center">
+    <img width="300" alt="Creating a new form" src="https://user-images.githubusercontent.com/37296364/149022582-139b64fa-094e-4c8a-bf87-7ea651bcaba3.png">
+  </p>
+</details>
+
 ## Install
 
 ```sh
