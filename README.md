@@ -2,13 +2,11 @@
 
 > A simple text sharing based on the connection IP address
 
-### ✨ [Demo](https://share.filippofinke.ch)
-
 <details>
   <summary>Demo</summary>
   <br>
   <p align="center">
-    <img width="300" alt="Creating a new form" src="https://user-images.githubusercontent.com/37296364/149022582-139b64fa-094e-4c8a-bf87-7ea651bcaba3.png">
+    <img width="300" alt="Creating a new form" src="https://user-images.githubusercontent.com/37296364/149662107-a827bb34-6b75-482c-bcfe-e01a868d697c.gif">
   </p>
 </details>
 
