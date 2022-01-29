@@ -5,19 +5,18 @@ process.env.PORT = process.env.PORT || 8080;
 
 let rooms = {};
 
-const addMessage = (ip, message) => {
-	if (!(ip in rooms)) {
-		rooms[ip] = [];
+const addMessage = (room, message) => {
+	if (!(room in rooms)) {
+		rooms[room] = [];
 	}
 
 	message = {
-		id: rooms[ip].length,
+		id: rooms[room].length,
 		timestamp: Date.now(),
 		message,
 	};
 
-	rooms[ip].unshift(message);
-
+	rooms[room].unshift(message);
 	return message;
 };
 
@@ -27,29 +26,33 @@ app.use(express.static("build"));
 app.use(express.json());
 
 app.get("/messages", (req, res) => {
-	let messages = rooms[req.ip] || [];
+	let room = req.ip;
+	let messages = rooms[room] || [];
 	return res.json(messages);
 });
 
 app.delete("/message/:id", (req, res) => {
 	let id = req.params.id;
+	let room = req.ip;
 
-	if (rooms[req.ip]) {
-		rooms[req.ip] = rooms[req.ip].filter((message) => message.id != id);
+	if (rooms[room]) {
+		rooms[room] = rooms[room].filter((message) => message.id != id);
 	}
 
 	return res.sendStatus(200);
 });
 
 app.delete("/messages", (req, res) => {
-	delete rooms[req.ip];
+	let room = req.ip;
+	delete rooms[room];
 	return res.sendStatus(200);
 });
 
 app.post("/message", (req, res) => {
 	let message = req.body.message;
+	let room = req.ip;
 	if (message) {
-		return res.json(addMessage(req.ip, message));
+		return res.json(addMessage(room, message));
 	}
 	return res.sendStatus(400);
 });
