@@ -41,6 +41,43 @@ const App = () => {
 		);
 	};
 
+	const uploadFile = (file) => {
+
+		if (!process.env.REACT_APP_SENDIT) {
+			console.log("Please set the REACT_APP_SENDIT environment variable in order to upload files!");
+			return;
+		}
+
+		let req = new XMLHttpRequest();
+
+		let promise = new Promise((resolve, reject) => {
+			req.upload.addEventListener("progress", (progress) => {
+				let percent =
+					Math.floor((progress.loaded / progress.total) * 100) + "%";
+				setMessage(percent);
+			});
+
+			req.onreadystatechange = () => {
+				if (req.readyState === 4) {
+					if (req.status === 200) {
+						setMessage(process.env.REACT_APP_SENDIT + req.response);
+						resolve();
+					} else {
+						setMessage("");
+						reject();
+					}
+				}
+			};
+		});
+		toast.promise(promise, {
+			loading: "Uploading...",
+			success: <b>File uploaded!</b>,
+			error: <b>File too big!</b>,
+		});
+		req.open("POST", process.env.REACT_APP_SENDIT + file.name, true);
+		req.send(file);
+	}
+
 	useEffect(() => {
 		MessageService.getAll().then((messages) => setMessages(messages));
 
@@ -49,34 +86,7 @@ const App = () => {
 			document.body.addEventListener("drop", (event) => {
 				event.preventDefault();
 				let file = event.dataTransfer.files[0];
-				let req = new XMLHttpRequest();
-
-				let promise = new Promise((resolve, reject) => {
-					req.upload.addEventListener("progress", (progress) => {
-						let percent =
-							Math.floor((progress.loaded / progress.total) * 100) + "%";
-						setMessage(percent);
-					});
-
-					req.onreadystatechange = () => {
-						if (req.readyState === 4) {
-							if (req.status === 200) {
-								setMessage(process.env.REACT_APP_SENDIT + req.response);
-								resolve();
-							} else {
-								setMessage("");
-								reject();
-							}
-						}
-					};
-				});
-				toast.promise(promise, {
-					loading: "Uploading...",
-					success: <b>File uploaded!</b>,
-					error: <b>File too big!</b>,
-				});
-				req.open("POST", process.env.REACT_APP_SENDIT + file.name, true);
-				req.send(file);
+				uploadFile(file);
 			});
 		}
 	}, []);
@@ -86,6 +96,7 @@ const App = () => {
 			<Toaster position="bottom-center" />
 			<Form
 				onSubmit={saveMessage}
+				onFileSelected={uploadFile}
 				message={message}
 				onChange={({ target }) => setMessage(target.value)}
 			></Form>
