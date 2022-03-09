@@ -46,11 +46,17 @@ const App = () => {
     });
   };
 
-  const copyMessage = (message) => {
+  const handleMessageClick = (message) => {
     MessageService.copy(message).then(
       () => toast.success("Message copied!"),
       () => toast.error("Failed to copy the message!")
     );
+
+    let { message: text } = message;
+
+    if (text.startsWith("https://") || text.startsWith("http://")) {
+      window.open(text, "_blank");
+    }
   };
 
   const uploadFile = (file) => {
@@ -97,7 +103,14 @@ const App = () => {
 
     if (process.env.REACT_APP_SENDIT) {
       console.log("sendit integration enabled!");
-      document.body.addEventListener("drop", (event) => {
+
+      window.addEventListener("dragover", (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+      });
+
+      window.addEventListener("drop", (event) => {
+        event.stopPropagation();
         event.preventDefault();
         let file = event.dataTransfer.files[0];
         uploadFile(file);
@@ -113,7 +126,7 @@ const App = () => {
         messages.map((m) => {
           return (
             <LazyLoad key={m.timestamp}>
-              <Message message={m} onDelete={() => deleteMessage(m)} onClick={() => copyMessage(m)}></Message>
+              <Message message={m} onDelete={() => deleteMessage(m)} onClick={() => handleMessageClick(m)}></Message>
             </LazyLoad>
           );
         })}
