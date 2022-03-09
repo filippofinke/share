@@ -9,112 +9,117 @@ import DeleteButton from "./components/DeleteButton/DeleteButton";
 import MessageService from "./services/MessageService";
 
 const App = () => {
-	let [message, setMessage] = useState("");
-	let [messages, setMessages] = useState(null);
+  let [message, setMessage] = useState("");
+  let [messages, setMessages] = useState(null);
 
-	const saveMessage = (event) => {
-		event.preventDefault();
-		setMessage("");
-		MessageService.save(message).then((message) => {
-			setMessages([message, ...messages]);
-		});
-	};
+  const saveMessage = (event) => {
+    event.preventDefault();
+    setMessage("");
+    MessageService.save(message)
+      .then((message) => {
+        setMessages([message, ...messages]);
+      })
+      .catch((error) => {
+        toast.error("Could not save message");
+      });
+  };
 
-	const deleteMessages = () => {
-		MessageService.deleteAll().then(() => {
-			setMessages("");
-			toast.success("Messages deleted!");
-		});
-	};
+  const deleteMessages = () => {
+    MessageService.deleteAll().then((response) => {
+      if (response.status === 200) {
+        setMessages("");
+        toast.success("Messages deleted!");
+      } else {
+        toast.error("Could not delete messages");
+      }
+    });
+  };
 
-	const deleteMessage = (message) => {
-		MessageService.delete(message).then(() => {
-			setMessages(messages.filter((m) => m.id !== message.id));
-			toast.success("Message deleted!");
-		});
-	};
+  const deleteMessage = (message) => {
+    MessageService.delete(message).then((response) => {
+      if (response.status === 200) {
+        setMessages(messages.filter((m) => m.id !== message.id));
+        toast.success("Message deleted!");
+      } else {
+        toast.error("Could not delete message");
+      }
+    });
+  };
 
-	const copyMessage = (message) => {
-		MessageService.copy(message).then(
-			() => toast.success("Message copied!"),
-			() => toast.error("Failed to copy the message!")
-		);
-	};
+  const copyMessage = (message) => {
+    MessageService.copy(message).then(
+      () => toast.success("Message copied!"),
+      () => toast.error("Failed to copy the message!")
+    );
+  };
 
-	const uploadFile = (file) => {
+  const uploadFile = (file) => {
+    if (!process.env.REACT_APP_SENDIT) {
+      console.log("Please set the REACT_APP_SENDIT environment variable in order to upload files!");
+      return;
+    }
 
-		if (!process.env.REACT_APP_SENDIT) {
-			console.log("Please set the REACT_APP_SENDIT environment variable in order to upload files!");
-			return;
-		}
+    let req = new XMLHttpRequest();
 
-		let req = new XMLHttpRequest();
+    let promise = new Promise((resolve, reject) => {
+      req.upload.addEventListener("progress", (progress) => {
+        let percent = Math.floor((progress.loaded / progress.total) * 100) + "%";
+        setMessage(percent);
+      });
 
-		let promise = new Promise((resolve, reject) => {
-			req.upload.addEventListener("progress", (progress) => {
-				let percent =
-					Math.floor((progress.loaded / progress.total) * 100) + "%";
-				setMessage(percent);
-			});
+      req.onreadystatechange = () => {
+        if (req.readyState === 4) {
+          if (req.status === 200) {
+            setMessage(process.env.REACT_APP_SENDIT + req.response);
+            resolve();
+          } else {
+            setMessage("");
+            reject();
+          }
+        }
+      };
+    });
+    toast.promise(promise, {
+      loading: "Uploading...",
+      success: <b>File uploaded!</b>,
+      error: <b>File too big!</b>,
+    });
+    req.open("POST", process.env.REACT_APP_SENDIT + file.name, true);
+    req.send(file);
+  };
 
-			req.onreadystatechange = () => {
-				if (req.readyState === 4) {
-					if (req.status === 200) {
-						setMessage(process.env.REACT_APP_SENDIT + req.response);
-						resolve();
-					} else {
-						setMessage("");
-						reject();
-					}
-				}
-			};
-		});
-		toast.promise(promise, {
-			loading: "Uploading...",
-			success: <b>File uploaded!</b>,
-			error: <b>File too big!</b>,
-		});
-		req.open("POST", process.env.REACT_APP_SENDIT + file.name, true);
-		req.send(file);
-	}
+  useEffect(() => {
+    MessageService.getAll()
+      .then((messages) => setMessages(messages))
+      .catch((error) => {
+        toast.error("Could not get messages");
+      });
 
-	useEffect(() => {
-		MessageService.getAll().then((messages) => setMessages(messages));
+    if (process.env.REACT_APP_SENDIT) {
+      console.log("sendit integration enabled!");
+      document.body.addEventListener("drop", (event) => {
+        event.preventDefault();
+        let file = event.dataTransfer.files[0];
+        uploadFile(file);
+      });
+    }
+  }, []);
 
-		if (process.env.REACT_APP_SENDIT) {
-			console.log("sendit integration enabled!");
-			document.body.addEventListener("drop", (event) => {
-				event.preventDefault();
-				let file = event.dataTransfer.files[0];
-				uploadFile(file);
-			});
-		}
-	}, []);
-
-	return (
-		<div className="app">
-			<Toaster position="bottom-center" />
-			<Form
-				onSubmit={saveMessage}
-				onFileSelected={uploadFile}
-				message={message}
-				onChange={({ target }) => setMessage(target.value)}
-			></Form>
-			{messages &&
-				messages.map((m) => {
-					return (
-						<LazyLoad key={m.timestamp}>
-							<Message
-								message={m}
-								onDelete={() => deleteMessage(m)}
-								onClick={() => copyMessage(m)}
-							></Message>
-						</LazyLoad>
-					);
-				})}
-			<DeleteButton onClick={deleteMessages}></DeleteButton>
-		</div>
-	);
+  return (
+    <div className="app">
+      <Toaster position="bottom-center" />
+      <Form onSubmit={saveMessage} onFileSelected={uploadFile} message={message} onChange={({ target }) => setMessage(target.value)}></Form>
+      {messages &&
+        messages.map((m) => {
+          return (
+            <LazyLoad key={m.timestamp}>
+              <Message message={m} onDelete={() => deleteMessage(m)} onClick={() => copyMessage(m)}></Message>
+            </LazyLoad>
+          );
+        })}
+      <DeleteButton onClick={deleteMessages}></DeleteButton>
+    </div>
+  );
 };
 
 export default App;
