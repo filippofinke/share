@@ -1,50 +1,58 @@
 .message {
-	background-color: #2d333b;
-	color: #cdd9e5;
-	padding: 10px;
-	border: 1px solid #444c56;
-	margin: 5px 0px;
-	position: relative;
-	font-size: 1em;
-	cursor: pointer;
-	border-radius: 5px;
-	overflow-wrap: break-word;
+  background-color: #2d333b;
+  color: #cdd9e5;
+  padding: 10px;
+  border: 1px solid #444c56;
+  margin: 5px 0px;
+  position: relative;
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 5px;
+  overflow-wrap: break-word;
+  display: flex;
+  align-items: center;
 }
 
 .message:hover {
-	background-color: #323c49;
+  background-color: #323c49;
 }
 
 .message:hover .delete {
-	display: block;
+  display: block;
 }
 
 .message:hover .timestamp {
-	display: none;
+  display: none;
 }
 
 .message .timestamp {
-	font-size: 0.6em;
-	position: absolute;
-	right: 3px;
-	bottom: 3px;
-	color: #a9b2bb;
+  font-size: 0.6em;
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  color: #a9b2bb;
 }
 
 .message .delete {
-	cursor: pointer;
-	margin: 0;
-	right: 5px;
-	position: absolute;
-	top: 50%;
-	-ms-transform: translateY(-50%);
-	transform: translateY(-50%);
-	background: transparent;
-	border: none;
-	color: #cdd9e5;
-	display: none;
+  cursor: pointer;
+  margin: 0;
+  right: 5px;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #cdd9e5;
+  display: none;
 }
 
 .message .delete:hover {
-	color: #dc3545;
+  color: #dc3545;
+}
+
+.message .icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
 }
