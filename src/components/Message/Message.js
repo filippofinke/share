@@ -11,7 +11,7 @@ const Message = ({ message, onDelete, onClick }) => {
 
   return (
     <div className="message" onClick={handleClick} title={title} alt={title}>
-      {icon ? <img className="icon" src={icon} alt="icon" /> : null}
+      {icon ? <img className="icon" onError={({ target }) => console.log(target.remove())} src={icon} alt="icon" /> : null}
       {content}
       <span className="timestamp">{new Date(timestamp).toLocaleString()}</span>
       <button className="delete" onClick={onDelete}>
