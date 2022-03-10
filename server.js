@@ -43,7 +43,9 @@ const fetchUrl = async (url) => {
     matches = iconRegex.exec(html);
     if (matches && matches.length > 1) {
       icon = matches[1];
-      icon = new URL(icon, url).href;
+      icon = new URL(icon, response.url).href;
+    } else {
+      icon = new URL("favicon.ico", response.url).href;
     }
   } catch (error) {
     console.log(error.message);
