@@ -1,0 +1,5 @@
+{
+  "env": ["PORT=8080", "REACT_APP_SENDIT=https://sendit.filippofinke.ch/"],
+  "commands": ["npm install", "npm run build", "npm run start"],
+  "port": 8086
+}
