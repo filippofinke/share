@@ -38,7 +38,7 @@ const fetchUrl = async (url) => {
       title = matches[1];
     }
 
-    let iconRegex = new RegExp(/<link\s+rel=".*icon*."\s+href="(.*?)"+.*>/);
+    let iconRegex = new RegExp(/<link.*?rel=".*?icon*.?".*?href="(.*?)".*?>/);
     matches = iconRegex.exec(html);
     if (matches && matches.length > 1) {
       icon = matches[1];
