@@ -1,5 +1,6 @@
 const express = require("express");
 const fetch = require("node-fetch");
+const AbortController = require("abort-controller");
 const app = express();
 
 process.env.PORT = process.env.PORT || 8080;
